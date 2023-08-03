@@ -1,0 +1,22 @@
+{
+  "name": "wwbebjs",
+  "version": "1.0.0",
+  "description": "this is a simple tools for anyone who wants to connect its whatsapp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AngeloAc/WWBEBJS.git"
+  },
+  "keywords": [
+    "wwebjs"
+  ],
+  "author": "Euclides de Carvalho",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AngeloAc/WWBEBJS/issues"
+  },
+  "homepage": "https://github.com/AngeloAc/WWBEBJS#readme"
+}
