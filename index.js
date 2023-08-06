@@ -4,7 +4,10 @@ const express = require('express');
 const http = require('http');
 // require('dotenv').config()
 
-const porta = normalizePort(process.env.PORT || 3000);
+
+
+//used just for test
+//const porta = normalizePort(process.env.PORT || 3000); 
 app.set('port', porta);
 
 const server = http.createServer(app);
