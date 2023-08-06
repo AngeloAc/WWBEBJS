@@ -7,7 +7,7 @@ const http = require('http');
 
 
 //used just for test
-//const porta = normalizePort(process.env.PORT || 3000); 
+const porta = normalizePort(process.env.PORT || 3000); 
 app.set('port', porta);
 
 const server = http.createServer(app);
