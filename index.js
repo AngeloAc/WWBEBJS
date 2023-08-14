@@ -6,12 +6,22 @@ const http = require('http');
 const cors = require('cors')
 const body_parser = require('body-parser');
 const WebSocket = require('ws');
+const { OpenAIModel } = require('./src/openAiModel');
+const mongo = require('mongoose');
+
+mongo.connect("mongodb://localhost:27017").
+    then(() => console.log("Connected to db")).catch(error => console.log("Ocorreu um erro ao criar o banco de dados!" + error.message));
+
+const User = require('./src/models/user');
+
+
+
 
 
 
 
 //used just for test
-// const porta = normalizePort(process.env.PORT || 3000); 
+const porta = normalizePort(process.env.PORT || 3000); 
 
 
 const server = http.createServer(app);
@@ -57,8 +67,6 @@ const client = new Client({
 });
 
 
-
-
 wss.on('connection', (ws) => {
     console.log('Novo cliente conectado');
   
@@ -102,11 +110,6 @@ wss.on('connection', (ws) => {
 
         }));
     });
-
-    
-    
-    // Enviar mensagens para o cliente a cada 5 segundos
-   
   
     ws.on('close', () => {
     //   clearInterval(sendInterval);
@@ -134,6 +137,15 @@ client.on('ready', () => {
 
 
 client.initialize();
+
+//CREATING WHATSAPP GPT...
+client.on('message', async msg => {
+  
+        const newOpenAiModel = new OpenAIModel(id);
+        const response = await newOpenAiModel.generateMessage(msg.body);
+        client.sendMessage(msg.from, response);
+
+});
 
 app.get('/client/logout', (req, res, next)=>{
     client.logout();
@@ -176,6 +188,15 @@ app.get('/qrcode', (req, res, next) => {
 
 });
 
+app.get('/mongo', async (req, res, next) => {
+    const user = await User.find();
+    
+
+    res.status(200).json({
+        message: user
+    })
+
+});
 
 
 app.set('port', porta);
