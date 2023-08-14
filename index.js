@@ -21,7 +21,7 @@ const User = require('./src/models/user');
 
 
 //used just for test
-const porta = normalizePort(process.env.PORT || 3000); 
+// const porta = normalizePort(process.env.PORT || 3000); 
 
 
 const server = http.createServer(app);
