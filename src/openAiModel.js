@@ -6,6 +6,7 @@ const { TextLoader } = require('langchain/document_loaders/fs/text');
 const User = require('./models/user');
 const fs = require('fs');
 const path = require('path');
+const dotenv = require('dotenv').config();
 
 class OpenAIModel {
     constructor(id) {
@@ -14,7 +15,7 @@ class OpenAIModel {
         const parent1 = path.resolve(parent, '..');
         // const parent2 = path.resolve(parent1, '..');
 
-        this.openAI_KEY = "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";
+        this.openAI_KEY = OPENAI_API_OI;
         this.modelName = "gpt-3.5-turbo";
         this.language = 'pt';
         this.temperature = 1;

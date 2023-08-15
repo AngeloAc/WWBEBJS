@@ -8,8 +8,10 @@ const body_parser = require('body-parser');
 const WebSocket = require('ws');
 const { OpenAIModel } = require('./src/openAiModel');
 const mongo = require('mongoose');
+const dotenv = require('dotenv').config();
 
-mongo.connect("mongodb://localhost:27017").
+
+mongo.connect(process.env.MONGO_CONNECT_URI).
     then(() => console.log("Connected to db")).catch(error => console.log("Ocorreu um erro ao criar o banco de dados!" + error.message));
 
 const User = require('./src/models/user');
@@ -20,8 +22,10 @@ const User = require('./src/models/user');
 
 
 
+
 //used just for test
-// const porta = normalizePort(process.env.PORT || 3000); 
+const porta = normalizePort(process.env.PORT || 3000);
+const id = "64d8c6135029756e72d39e39";
 
 
 const server = http.createServer(app);
