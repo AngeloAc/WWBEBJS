@@ -24,8 +24,8 @@ const User = require('./src/models/user');
 
 
 //used just for test
-const porta = normalizePort(process.env.PORT || 3000);
-const id = "64d8c6135029756e72d39e39";
+// const porta = normalizePort(process.env.PORT || 3000);
+// const id = "64d8c6135029756e72d39e39";
 
 
 const server = http.createServer(app);
