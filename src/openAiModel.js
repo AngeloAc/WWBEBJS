@@ -13,9 +13,9 @@ class OpenAIModel {
 
         const parent = path.resolve(__dirname, '..');
         const parent1 = path.resolve(parent, '..');
-        // const parent2 = path.resolve(parent1, '..');
+        const parent2 = path.resolve(parent1, '..');
 
-        this.openAI_KEY = OPENAI_API_OI;
+        this.openAI_KEY = process.env.OPENAI_API_OI;
         this.modelName = "gpt-3.5-turbo";
         this.language = 'pt';
         this.temperature = 1;
