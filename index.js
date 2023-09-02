@@ -9,6 +9,7 @@ const WebSocket = require('ws');
 const { OpenAIModel } = require('./src/openAiModel');
 const mongo = require('mongoose');
 const dotenv = require('dotenv').config();
+const User = require('./src/models/user')
 
 
 
@@ -22,7 +23,7 @@ const dotenv = require('dotenv').config();
 
 //used just for test
 // const porta = normalizePort(process.env.PORT || 3000);
-// const id = "64e8a85eaefbecdcc3eb40fe";
+// const id = "64e6287e4f688c06d462f4f8";
 
 
 const server = http.createServer(app);
@@ -119,14 +120,27 @@ mongoose.connect(process.env.MONGO_CONNECT_URI).then(() => {
         message = message;
     });
 
-    client.on('authenticated', () => {
-        console.log('Autenticado');
+    client.on('authenticated', (session) => {
+        console.log('Autenticado com sucesso');
         auth = true;
-    });
+        
+      });
 
-
-    client.on('ready', () => {
+    client.on('ready', async () => {
         console.log('Cliente pronto');
+        const ownInfo = client.info.me
+        const user = await User.findByIdAndUpdate({_id: id},
+            {$set: {
+                addons: {
+                    userNumber: ownInfo.user
+                    }
+                }
+            }
+        );
+        
+        console.log('Meu nome:', ownInfo.user);
+        console.log('Battery status:', await client.info.getBatteryStatus);
+        console.log('--------');
         clientOn = "red";
     });
 
@@ -134,7 +148,6 @@ mongoose.connect(process.env.MONGO_CONNECT_URI).then(() => {
 
     //CREATING WHATSAPP GPT...
     client.on('message', async msg => {
-
         const newOpenAiModel = new OpenAIModel(id);
         const response = await newOpenAiModel.generateMessage(msg.body);
         client.sendMessage(msg.from, response);

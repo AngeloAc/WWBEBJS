@@ -19,6 +19,11 @@ const schema = new Schema({
         type: String,
         required: true,
     },
+    country:{ type: String, default: 'Angola' },
+    countryCode: { type: String, default: '+244'},
+    language: { type: String, default: 'Portugues' },
+    telefone: { type: Number, default: null },
+    plano: { type: String, default: 'Free' },
     porta: {
         type: String,
     },
@@ -28,6 +33,8 @@ const schema = new Schema({
             installed: { type: Boolean, default: false },
             model: { type: String, default: 'business' },
             status: { type: String, default: 'install' },
+            userNumber: { type: String, default: null},
+            userName: {type: String, default: null},
         }
     ],
     script:[
@@ -49,6 +56,19 @@ const schema = new Schema({
         }
     ]
     ,
+    code:[
+        {   
+            name: { type: String, default: null },
+            code: { type: String, default: null },
+            description: {type: String, default: null},
+            messages: [{
+                text: {type: String, default:null},
+                isUser: { type: Boolean }
+            }],
+            lastMessage:{type: String},
+        }
+    ],
+    codeStatus:{ type: String, default: true },
     tokens:[
         {
             token: { type: String, required: true }
@@ -61,37 +81,6 @@ const schema = new Schema({
     }
 );
 
-// Methodo responsavel por fazer o hash da senha antes que seja savo no database.
-// schema.pre('save', async function(next) {
-//     const user = this;
-    
-//     if (user.isModified('password')) {
-//         user.password = await bcrypt.hash(user.password, 8);
-//     }
-//     next();
-// });
-
-// vai gerar uma authenticação para o token...
-// schema.methods.generateAuthToken = async function(){
-//     const user = this;
-//     const token = jwt.sign({_id: user._id, name: user.name, email: user.email, porta: user.porta}, process.env.TOKEN_KEY);
-//     user.tokens = user.tokens.concat({token});
-//     await user.save();
-//     return token;
-    
-// };
-// schema.statics.findByCredentials = async (email, password)=>{
-//     const user = await User.findOne({ email });
-//     if(!user){
-//         throw new Error({error: "Login Invalido."})
-        
-//     }
-//     const isPasswordMatch = await bcrypt.compare(password, user.password);
-//     if(!isPasswordMatch){
-//         throw new Error({ error: "Login Invalido." })
-//     }
-//     return user;
-// }
 
 const User = mongoose.model('Users', schema);
 module.exports = User;
