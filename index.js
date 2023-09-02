@@ -40,7 +40,8 @@ app.use(body_parser.urlencoded({ extended: false }));
 
 //whatsapp
 const fs = require('fs');
-const QRCODE = require('qrcode')
+const QRCODE = require('qrcode');
+const {Client, LocalAuth} = require('whatsapp-web.js');
 let qrCode = "www.oinet.ao";
 let percentual = '0';
 let message = "Whatsapp";
@@ -49,21 +50,35 @@ let auth_error = "Erro ao se autenticar.";
 let clientOn = "black"
 
 
-const { Client, RemoteAuth } = require('whatsapp-web.js');
-const { MongoStore } = require('wwebjs-mongo');
+
 const mongoose = require('mongoose');
 
+// mongo.connect(process.env.MONGO_CONNECT_URI).
+mongo.connect(process.env.MONGO_CONNECT_URI).
+    then(() => console.log("Connected to db")).catch(error => console.log("Ocorreu um erro ao criar o banco de dados!" + error.message));
 
-// Load the session data
-mongoose.connect(process.env.MONGO_CONNECT_URI).then(() => {
-    const store = new MongoStore({ mongoose: mongoose });
-    const client = new Client({
-        authStrategy: new RemoteAuth({
-            store: store,
-            clientId: 'client-one',
-            backupSyncIntervalMs: 300000
-        })
-    });
+
+
+
+const SESSION_FILE_PATH = './session.json';
+
+let sessionData;
+if(fs.existsSync(SESSION_FILE_PATH)) {
+    sessionData = require(SESSION_FILE_PATH);
+}
+
+const client = new Client({
+    puppeteer: {
+        executablePath: '/usr/bin/brave-browser-stable',
+      },
+      authStrategy: new LocalAuth({
+        clientId: "client-one"
+      }),
+      puppeteer: {
+        headless: true,
+      }
+});
+
     wss.on('connection', (ws) => {
         console.log('Novo cliente conectado');
 
@@ -161,9 +176,6 @@ mongoose.connect(process.env.MONGO_CONNECT_URI).then(() => {
             message: 'Client disconnected from whatsapp.'
         });
     });
-
-
-});
 
 
 
