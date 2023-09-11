@@ -23,7 +23,7 @@ const User = require('./src/models/user')
 
 //used just for test
 // const porta = normalizePort(process.env.PORT || 3000);
-// const id = "64f31192a0c07b912a4a9757";
+// const id = "64f3201a1b19a7078c5639e7";
 
 
 const server = http.createServer(app);
@@ -170,7 +170,7 @@ const client = new Client({
     });
 
     app.get('/client/logout', (req, res, next) => {
-        client.logout();
+        // client.logout();
         console.log('cliente whatsapp desconectado com sucess.')
         res.status(200).json({
             message: 'Client disconnected from whatsapp.'
