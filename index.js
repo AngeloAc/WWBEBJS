@@ -148,16 +148,14 @@ client.on('ready', async () => {
         {
             $set: {
                 addons: {
-                    userNumber: ownInfo.user
+                    userNumber: ownInfo.user,
+                    status: 'edit',
+                        
                 }
             }
         }
     );
-
-    console.log('Meu nome:', ownInfo.user);
-    console.log('Battery status:', await client.info.getBatteryStatus);
-    console.log('--------');
-    clientOn = "red";
+    
 });
 
 client.initialize();
