@@ -41,7 +41,7 @@ app.use(body_parser.urlencoded({ extended: false }));
 //whatsapp
 const fs = require('fs');
 const QRCODE = require('qrcode');
-const {Client, LocalAuth} = require('whatsapp-web.js');
+const { Client, LocalAuth } = require('whatsapp-web.js');
 let qrCode = "www.oinet.ao";
 let percentual = '0';
 let message = "Whatsapp";
@@ -63,126 +63,144 @@ mongo.connect(process.env.MONGO_CONNECT_URI).
 const SESSION_FILE_PATH = './session.json';
 
 let sessionData;
-if(fs.existsSync(SESSION_FILE_PATH)) {
+if (fs.existsSync(SESSION_FILE_PATH)) {
     sessionData = require(SESSION_FILE_PATH);
 }
 
 const client = new Client({
     puppeteer: {
         executablePath: '/usr/bin/brave-browser-stable',
-      },
-      authStrategy: new LocalAuth({
+    },
+    authStrategy: new LocalAuth({
         clientId: "client-one"
-      }),
-      puppeteer: {
+    }),
+    puppeteer: {
         headless: true,
-      }
+    }
 });
 
-    wss.on('connection', (ws) => {
-        console.log('Novo cliente conectado');
+wss.on('connection', (ws) => {
+    console.log('Novo cliente conectado');
 
 
-        client.on('qr', qr => {
-            //qrcode.generate(qr, {small: true});
-            // qrCode = qr;
-            console.log("QR. CODE IS RUNNING");
+    client.on('qr', qr => {
+        //qrcode.generate(qr, {small: true});
+        // qrCode = qr;
+        console.log("QR. CODE IS RUNNING");
 
-            QRCODE.toDataURL(qr, (err, url) => {
-                if (err) {
-                    console.error('Erro ao gerar o código QR:', err);
-                    res.status(500).send('Erro ao gerar o código QR');
-                } else {
-                    ws.send(JSON.stringify({
-                        qrCode: url,
-                        percentual: percentual,
-                        message: message,
-                        auth: auth,
-                        auth_error: auth_error,
-                        clientOn: clientOn
+        QRCODE.toDataURL(qr, (err, url) => {
+            if (err) {
+                console.error('Erro ao gerar o código QR:', err);
+                res.status(500).send('Erro ao gerar o código QR');
+            } else {
+                ws.send(JSON.stringify({
+                    qrCode: url,
+                    percentual: percentual,
+                    message: message,
+                    auth: auth,
+                    auth_error: auth_error,
+                    clientOn: clientOn
 
-                    }));
+                }));
 
-                }
-            });
-
+            }
         });
 
-        client.on('authenticated', () => {
-            console.log('Autenticado');
-            auth = true;
-
-            ws.send(JSON.stringify({
-                qrCode: null,
-                percentual: percentual,
-                message: message,
-                auth: auth,
-                auth_error: auth_error,
-                clientOn: clientOn
-
-            }));
-        });
-
-        ws.on('close', () => {
-            //   clearInterval(sendInterval);
-            console.log('Cliente desconectado');
-        });
     });
 
-    client.on('loading_screen', (percent, message) => {
-        console.log('Carregando... ', percent, message);
-        percentual = percent;
-        message = message;
-    });
-
-    client.on('authenticated', (session) => {
-        console.log('Autenticado com sucesso');
+    client.on('authenticated', () => {
+        console.log('Autenticado');
         auth = true;
-        
-      });
 
-    client.on('ready', async () => {
-        console.log('Cliente pronto');
-        const ownInfo = client.info.me
-        const user = await User.findByIdAndUpdate({_id: id},
-            {$set: {
+        ws.send(JSON.stringify({
+            qrCode: null,
+            percentual: percentual,
+            message: message,
+            auth: auth,
+            auth_error: auth_error,
+            clientOn: clientOn
+
+        }));
+    });
+
+    ws.on('close', () => {
+        //   clearInterval(sendInterval);
+        console.log('Cliente desconectado');
+    });
+});
+
+client.on('loading_screen', (percent, message) => {
+    console.log('Carregando... ', percent, message);
+    percentual = percent;
+    message = message;
+});
+
+client.on('authenticated', (session) => {
+    console.log('Autenticado com sucesso');
+    auth = true;
+
+});
+
+client.on('ready', async () => {
+    console.log('Cliente pronto');
+    const ownInfo = client.info.me
+    const user = await User.findByIdAndUpdate({ _id: id },
+        {
+            $set: {
                 addons: {
                     userNumber: ownInfo.user
-                    }
                 }
             }
-        );
-        
-        console.log('Meu nome:', ownInfo.user);
-        console.log('Battery status:', await client.info.getBatteryStatus);
-        console.log('--------');
-        clientOn = "red";
+        }
+    );
+
+    console.log('Meu nome:', ownInfo.user);
+    console.log('Battery status:', await client.info.getBatteryStatus);
+    console.log('--------');
+    clientOn = "red";
+});
+
+client.initialize();
+
+//CREATING WHATSAPP GPT...
+client.on('message', async msg => {
+    const newOpenAiModel = new OpenAIModel(id);
+    const response = await newOpenAiModel.generateMessage(msg.body);
+    client.sendMessage(msg.from, response);
+
+});
+
+app.get('/client/logout', (req, res, next) => {
+    // client.logout();
+    console.log('cliente whatsapp desconectado com sucess.')
+    res.status(200).json({
+        message: 'Client disconnected from whatsapp.'
     });
+    return process.exit();
+});
 
-    client.initialize();
 
-    //CREATING WHATSAPP GPT...
-    client.on('message', async msg => {
-        const newOpenAiModel = new OpenAIModel(id);
-        const response = await newOpenAiModel.generateMessage(msg.body);
-        client.sendMessage(msg.from, response);
 
+
+
+app.post('/sendMessage', (req, res, next) => {
+  try {
+    const phone = req.body.phone_invite;
+    const sender = req.body.name_sender;
+
+    const message_invite = "Foste convidado pelo seu amigo(a) " + sender + " juntar-te a família Startic, com a melhor Inteligencia Artificial. Acesse também: https://startic.ao. Para saber mais podemos conversar aqui.";
+    client.sendMessage(phone, message_invite);
+
+    return res.status(200).json({
+        message: "Mensagem enviada."
     });
+  } catch (error) {
+    return res.status(400).json({
+        error: error
+    })
+  }
 
-    app.get('/client/logout', (req, res, next) => {
-        // client.logout();
-        console.log('cliente whatsapp desconectado com sucess.')
-        res.status(200).json({
-            message: 'Client disconnected from whatsapp.'
-        });
-        return process.exit();
-    });
-
-
-
-
-
-
+})
 
 app.get('/qrcode', (req, res, next) => {
 
