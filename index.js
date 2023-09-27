@@ -69,7 +69,8 @@ if (fs.existsSync(SESSION_FILE_PATH)) {
 
 const client = new Client({
     puppeteer: {
-        executablePath: '/usr/bin/brave-browser-stable',
+        // executablePath: '/usr/bin/brave-browser-stable',
+        args: ['--no-sandbox'],
     },
     authStrategy: new LocalAuth({
         clientId: "client-one"
