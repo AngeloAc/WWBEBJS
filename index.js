@@ -164,7 +164,8 @@ client.initialize();
 //CREATING WHATSAPP GPT...
 client.on('message', async msg => {
     const newOpenAiModel = new OpenAIModel(id);
-    const response = await newOpenAiModel.generateMessage(msg.body);
+    // const response = await newOpenAiModel.generateMessage(msg.body);
+    const response = await newOpenAiModel.generateDirectFromOpenAI(msg.body)
     client.sendMessage(msg.from, response);
 
 });
@@ -183,21 +184,29 @@ app.get('/client/logout', (req, res, next) => {
 
 
 app.post('/sendMessage', (req, res, next) => {
-  try {
-    const phone = req.body.phone_invite;
-    const sender = req.body.name_sender;
+    console.log("estou recebendo a message...");
+try {
+      console.log(req.body);
+const phone = req.body.phone_invite;
+const sender = req.body.sender;
+const message_invite = "Foste convidado pelo seu amigo(a) " + sender + " juntar-te a família Startic, com a melhor Inteligencia Artificial. Acesse também: https://startic.ao. Para saber mais podemos conversar aqui.";
+client.sendMessage("244"+phone+"@c.us", message_invite).then((message) => {
+  console.log(`Message sent successfully. Message ID: `);
 
-    const message_invite = "Foste convidado pelo seu amigo(a) " + sender + " juntar-te a família Startic, com a melhor Inteligencia Artificial. Acesse também: https://startic.ao. Para saber mais podemos conversar aqui.";
-    client.sendMessage(phone, message_invite);
+})
+.catch((error) => {
+  console.error('Error sending message:', error);
+        return res.status(400).json({error: "Não conseguimos enviara a sua mensagem."});
+});
 
-    return res.status(200).json({
-        message: "Mensagem enviada."
-    });
-  } catch (error) {
-    return res.status(400).json({
-        error: error
-    })
-  }
+return res.status(200).json({
+    message: "Mensagem enviada."
+});
+} catch (error) {
+return res.status(400).json({
+    error: error
+})
+}
 
 })
 
