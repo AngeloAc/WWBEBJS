@@ -2,7 +2,7 @@
 const express = require('express');
 const app = express();
 const http = require('http');
-// require('dotenv').config()
+const multer = require('multer');
 const cors = require('cors')
 const body_parser = require('body-parser');
 const WebSocket = require('ws');
@@ -10,9 +10,6 @@ const { OpenAIModel } = require('./src/openAiModel');
 const mongo = require('mongoose');
 const dotenv = require('dotenv').config();
 const User = require('./src/models/user')
-
-
-
 
 
 
@@ -38,6 +35,18 @@ app.use(body_parser.json());
 app.use(body_parser.urlencoded({ extended: false }));
 
 
+// Configuração do Multer para o upload de arquivos
+const storage = multer.diskStorage({
+    destination: 'uploads/', // Pasta onde os arquivos serão salvos
+    filename: (req, file, cb) => {
+      const extname = path.extname(file.originalname);
+      cb(null, Date.now() + extname); // Nome do arquivo será o timestamp atual + extensão
+    },
+  });
+  
+  const upload = multer({ storage });
+
+
 //whatsapp
 const fs = require('fs');
 const QRCODE = require('qrcode');
@@ -53,7 +62,7 @@ let clientOn = "black"
 
 const mongoose = require('mongoose');
 
-// mongo.connect(process.env.MONGO_CONNECT_URI).
+
 mongo.connect(process.env.MONGO_CONNECT_URI).
     then(() => console.log("Connected to db")).catch(error => console.log("Ocorreu um erro ao criar o banco de dados!" + error.message));
 
@@ -208,7 +217,20 @@ return res.status(400).json({
 })
 }
 
-})
+});
+
+
+// Rota para receber o upload de imagens
+app.post('/upload', upload.single('file'), (req, res) => {
+
+    client.sendMessage("244935407576@c.us", "Novo pagamento do cliente de 2.000,00 kz");
+    if (!req.file) {
+      return res.status(400).send('Nenhum arquivo foi enviado.');
+    }
+    res.send('Arquivo enviado com sucesso!');
+  });
+
+
 
 app.get('/qrcode', (req, res, next) => {
 
