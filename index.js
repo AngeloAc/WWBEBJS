@@ -198,7 +198,7 @@ app.post('/sendMessage', (req, res, next) => {
         // console.log(req.body);
         const phone = req.body.phone_invite;
         const sender = req.body.sender;
-        const message_invite = "Foste convidado pelo seu amigo(a) " + sender + " juntar-te a família Startic, com a melhor Inteligencia Artificial. Acesse também: https://startic.ao. Para saber mais podemos conversar aqui.";
+        const message_invite = "Oi\n\n,Foste convidado pelo seu amigo(a) *" + sender + "* juntar-te a comunidade Startic, com a melhor Inteligencia Artificial para o seu aprendizado e negócio.\n Acesse também: https://chat.startic.ao.\n Para saber mais podemos conversar aqui.";
         client.sendMessage(`${req.body.index}${phone}@c.us`, message_invite).then((message) => {
             // console.log(`Message sent successfully. Message ID: `);
   
@@ -265,7 +265,7 @@ app.set('port', porta);
 
 
 server.listen(porta);
-console.log("Server is running on port 3000");
+console.log("Server is running on port " + porta);
 
 function normalizePort(val) {
     const port = parseInt(val, 10);

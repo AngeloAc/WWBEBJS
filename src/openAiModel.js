@@ -38,7 +38,7 @@ class OpenAIModel {
         //   await this.script("64d25277bffb9fb211fcb3bb"); // pegando do banco de dados o script
 
         this.fileContents = await this.fileLoader.load();
-        console.log(this.fileContents)
+        
         const embeddings = new OpenAIEmbeddings({
             openAIApiKey: this.openAI_KEY,
             language: this.language
