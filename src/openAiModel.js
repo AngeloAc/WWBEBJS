@@ -7,6 +7,7 @@ const User = require('./models/user');
 const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv').config();
+const { MemoryVectorStore } = require("langchain/vectorstores/memory");
 
 class OpenAIModel {
     constructor(id) {
@@ -15,12 +16,13 @@ class OpenAIModel {
         const parent1 = path.resolve(parent, '..');
         const parent2 = path.resolve(parent1, '..');
 
-        this.openAI_KEY = process.env.OPENAI_API_OI;
+        this.openAI_KEY = process.env.OPENAI_API_OI
         this.modelName = "gpt-3.5-turbo";
         this.language = 'pt';
         this.temperature = 1;
         this.id = id
         this.fileLoader = new TextLoader(parent2 +'/' + this.id + '/file.txt');  // Carregar o arquivo txt....
+        // this.fileLoader = new TextLoader('./file.txt'); 
         this.fileContents = '';
 
         this.model = new OpenAI({
@@ -42,7 +44,8 @@ class OpenAIModel {
             language: this.language
         });
 
-        const vectorDB = await Chroma.fromDocuments(this.fileContents, embeddings, {});
+        // const vectorDB = await Chroma.fromDocuments(this.fileContents, embeddings, {});
+        const vectorDB = await MemoryVectorStore.fromDocuments(this.fileContents, embeddings)
         const questionchain = ConversationalRetrievalQAChain.fromLLM(this.model, vectorDB.asRetriever(), {
             language: 'pt'
         });
@@ -73,4 +76,4 @@ class OpenAIModel {
 
 }
 
-module.exports = { OpenAIModel }
+module.exports = { OpenAIModel } 

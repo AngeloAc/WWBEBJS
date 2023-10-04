@@ -110,6 +110,16 @@
 // module.exports = app;
 
 
+// const {OpenAIModel} = require('./openAiModel');
+// const c = new OpenAIModel();
 
 
+
+
+// const image = async () =>{
+//   const a = await  c.generateMessage("oi, qual é o seu nome");
+//   console.log(a)
+//  }
+ 
+//  image()
 

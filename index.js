@@ -173,8 +173,8 @@ client.initialize();
 //CREATING WHATSAPP GPT...
 client.on('message', async msg => {
     const newOpenAiModel = new OpenAIModel(id);
-    // const response = await newOpenAiModel.generateMessage(msg.body);
-    const response = await newOpenAiModel.generateDirectFromOpenAI(msg.body)
+    const response = await newOpenAiModel.generateMessage(msg.body);
+    // const response = await newOpenAiModel.generateDirectFromOpenAI(msg.body)
     client.sendMessage(msg.from, response);
 
 });
