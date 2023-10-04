@@ -198,7 +198,7 @@ app.post('/sendMessage', (req, res, next) => {
         // console.log(req.body);
         const phone = req.body.phone_invite;
         const sender = req.body.sender;
-        const message_invite = "Oi\n\n,Foste convidado pelo seu amigo(a) *" + sender + "* juntar-te a comunidade Startic, com a melhor Inteligencia Artificial para o seu aprendizado e negócio.\n Acesse também: https://chat.startic.ao.\n Para saber mais podemos conversar aqui.";
+        const message_invite = "Recebeste um convite do teu amigo " + sender + " para te juntares à comunidade Startic, onde podes encontrar a melhor Inteligência Artificial para o teu aprendizado e negócio. Dá também uma olhada em: https://chat.startic.ao. Se quiseres saber mais, podemos conversar por aqui.";
         client.sendMessage(`${req.body.index}${phone}@c.us`, message_invite).then((message) => {
             // console.log(`Message sent successfully. Message ID: `);
   
