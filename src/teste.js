@@ -78,7 +78,7 @@ client.on('loading_screen', (percent, message) => {
 app.post('/sendMessage', (req, res, next) => {
   console.log("estou recebendo a message...");
   try {
-      // console.log(req.body);
+      console.log(req.body);
       const phone = req.body.phone_invite;
       const sender = req.body.sender;
       const message_invite = "Foste convidado pelo seu amigo(a) " + sender + " juntar-te a família Startic, com a melhor Inteligencia Artificial. Acesse também: https://startic.ao. Para saber mais podemos conversar aqui.";
@@ -113,14 +113,25 @@ app.post('/upload', upload.single('file'), (req, res) => {
     res.send('Arquivo enviado com sucesso!');
   });
 
+
+
+
+
   app.post('/verificationcode', (req, res) => {
+    console.log(req.body)
     client.sendMessage(`${req.body.index}${req.body.telefone}@c.us`, `O codigo *${req.body.randomNumber}* será utilizado na app Chat.Startic `);
     return res.status(200).json({
       data: req.body
     })
   });
 
- 
+  app.post('/verificationcode', (req, res) => {
+    client.sendMessage(`${req.body.index}${req.body.telefone}@c.us`, `O codigo *${req.body.randomNumber}* será utilizado na app Chat.Startic `);
+    return res.status(200).json({
+        data: req.body
+    })
+});
+
 client.initialize();
  
 app.listen(port, () => {
