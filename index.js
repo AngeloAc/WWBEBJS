@@ -172,11 +172,15 @@ client.initialize();
 
 //CREATING WHATSAPP GPT...
 client.on('message', async msg => {
+    const user = await User.findById({ _id: id })
+    if(user.isWhatsappActive){
     const newOpenAiModel = new OpenAIModel(id);
     const response = await newOpenAiModel.generateMessage(msg.body);
     // const response = await newOpenAiModel.generateDirectFromOpenAI(msg.body)
     client.sendMessage(msg.from, response);
-
+    }else{
+        console.log("nao posso responder sem autorização...");
+    }
 });
 
 app.get('/client/logout', (req, res, next) => {
@@ -193,7 +197,7 @@ app.get('/client/logout', (req, res, next) => {
 
 
 app.post('/sendMessage', (req, res, next) => {
-    console.log("estou recebendo a message...");
+  
     try {
         // console.log(req.body);
         const phone = req.body.phone_invite;
