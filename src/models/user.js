@@ -24,6 +24,7 @@ const schema = new Schema({
     language: { type: String, default: 'Portugues' },
     telefone: { type: Number, default: null },
     plano: { type: String, default: 'Free' },
+    isWhatsappActive: {type: Boolean, default: true},
     porta: {
         type: String,
     },
