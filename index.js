@@ -179,7 +179,7 @@ client.on('message', async msg => {
     // const response = await newOpenAiModel.generateDirectFromOpenAI(msg.body)
     client.sendMessage(msg.from, response);
     }else{
-        console.log("nao posso responder sem autorização...");
+        // console.log("nao posso responder sem autorização...");
     }
 });
 
