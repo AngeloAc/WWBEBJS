@@ -4,6 +4,7 @@ const app = express();
 const https = require('https');
 const multer = require('multer');
 const cors = require('cors')
+const fs = require('fs');
 const body_parser = require('body-parser');
 const WebSocket = require('ws');
 const { OpenAIModel } = require('./src/openAiModel');
