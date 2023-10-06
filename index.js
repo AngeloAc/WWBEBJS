@@ -30,8 +30,7 @@ const id = "6516eb2d13a89ed768ba1ecd";
 const server = https.createServer(options ,app);
 const wss = new WebSocket.Server({ server });
 
-app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views');
+
 app.use(cors({
     origin: '*',
 }))
@@ -273,7 +272,7 @@ app.set('port', porta);
 
 
 server.listen(porta);
-console.log("Server is running on port " + porta);
+console.log("> Server is running on port " + porta);
 
 function normalizePort(val) {
     const port = parseInt(val, 10);
