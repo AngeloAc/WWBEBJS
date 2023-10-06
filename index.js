@@ -19,8 +19,8 @@ const User = require('./src/models/user')
 
 
 //used just for test
-// const porta = normalizePort(process.env.PORT || 3000);
-// const id = "64f3201a1b19a7078c5639e7";
+const porta = 21351;
+const id = "6516eb2d13a89ed768ba1ecd";
 
 
 const server = http.createServer(app);
@@ -202,7 +202,7 @@ app.post('/sendMessage', (req, res, next) => {
         // console.log(req.body);
         const phone = req.body.phone_invite;
         const sender = req.body.sender;
-        const message_invite = "Recebeste um convite do teu amigo " + sender + " para te juntares à comunidade Startic, onde podes encontrar a melhor Inteligência Artificial para o teu aprendizado e negócio. Dá também uma olhada em: https://chat.startic.ao. Se quiseres saber mais, podemos conversar por aqui.";
+        const message_invite = "📩 *Mensagem!* Recebeste um convite do teu amigo *" + sender + "* para te juntares à comunidade *Startic*, onde podes encontrar a melhor Inteligência Artificial para o teu aprendizado e negócio. Dá também uma olhada em  🔐: https://chat.startic.ao. Se quiseres saber mais, podemos conversar por aqui.";
         client.sendMessage(`${req.body.index}${phone}@c.us`, message_invite).then((message) => {
             // console.log(`Message sent successfully. Message ID: `);
   
