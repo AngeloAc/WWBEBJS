@@ -52,7 +52,7 @@ const upload = multer({ storage });
 
 
 //whatsapp
-const fs = require('fs');
+
 const QRCODE = require('qrcode');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 let qrCode = "www.oinet.ao";
