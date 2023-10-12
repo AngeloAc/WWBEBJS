@@ -1,7 +1,8 @@
 // create a server 
 const express = require('express');
 const app = express();
-const https = require('https');
+// const https = require('https');
+const http = require('http');
 const multer = require('multer');
 const cors = require('cors')
 const fs = require('fs');
@@ -13,10 +14,10 @@ const dotenv = require('dotenv').config();
 const User = require('./src/models/user')
 
 
-const options = {
-  key: fs.readFileSync('/etc/apache2/certificate/apache.key'),
-  cert: fs.readFileSync('/etc/apache2/certificate/apache-certificate.crt')
-};
+// const options = {
+//   key: fs.readFileSync('/etc/apache2/certificate/apache.key'),
+//   cert: fs.readFileSync('/etc/apache2/certificate/apache-certificate.crt')
+// };
 
 
 
@@ -27,7 +28,8 @@ const porta = 21351;
 const id = "6516eb2d13a89ed768ba1ecd";
 
 
-const server = https.createServer(options, app);
+// const server = https.createServer(options, app);
+const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 
